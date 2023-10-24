@@ -1,60 +1,40 @@
-import React from 'react'
+import React , { useState , useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from 'axios';
+import SliderArea from './SliderArea'
+import Products from "./Products";
 
 function Header() {
+    /*CATEGORY LINKS GETTING*/
+    const [categorydata,setcategoryData]=useState([]);
+    const loadcategoryData=async()=>{
+        const response=await axios.get('http://localhost:5000/api/productcategories'); 
+        setcategoryData(response.data);
+        };
+    /*CATEGORY LINKS GETTING END*/
+    /*NAVBAR LINKS GETTING*/
+    const [navbardata,setnavbarData]=useState([]);
+    const loadnavbarData=async()=>{
+        const response=await axios.get('http://localhost:5000/api/navbarlinks'); 
+        setnavbarData(response.data);
+        };
+    /*NAVBAR LINKS GETTING END*/
+    /*LOADING ALL DATA FROM DB */
+        useEffect(()=>{
+            loadnavbarData();
+            loadcategoryData();
+        },[])
   return (
     <div>
 <>
   <header className="header shop">
-    {/* Topbar */}
-    <div className="topbar">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-4 col-md-12 col-12">
-            {/* Top Left */}
-            <div className="top-left">
-              <ul className="list-main">
-                <li>
-                  <i className="ti-headphone-alt" /> +060 (800) 801-582
-                </li>
-                <li>
-                  <i className="ti-email" /> support@shophub.com
-                </li>
-              </ul>
-            </div>
-            {/*/ End Top Left */}
-          </div>
-          <div className="col-lg-8 col-md-12 col-12">
-            {/* Top Right */}
-            <div className="right-content">
-              <ul className="list-main">
-                <li>
-                  <i className="ti-location-pin" /> Store location
-                </li>
-                <li>
-                  <i className="ti-alarm-clock" /> <a href="#">Daily deal</a>
-                </li>
-                <li>
-                  <i className="ti-user" /> <a href="#">My account</a>
-                </li>
-                <li>
-                  <i className="ti-power-off" />
-                  <a href="login.html#">Login</a>
-                </li>
-              </ul>
-            </div>
-            {/* End Top Right */}
-          </div>
-        </div>
-      </div>
-    </div>
-    {/* End Topbar */}
     <div className="middle-inner">
       <div className="container">
         <div className="row">
           <div className="col-lg-2 col-md-2 col-12">
             {/* Logo */}
             <div className="logo">
-              <a href="index.html">
+              <a href="#">
                 <img src="images/logo.png" alt="logo" />
               </a>
             </div>
@@ -283,48 +263,42 @@ function Header() {
                       </li>
                     </ul>
                   </li>
-                  <li>
-                    <a href="#">accessories</a>
-                  </li>
-                  <li>
-                    <a href="#">top 100 offer</a>
-                  </li>
-                  <li>
-                    <a href="#">sunglass</a>
-                  </li>
-                  <li>
-                    <a href="#">watch</a>
-                  </li>
-                  <li>
-                    <a href="#">man’s product</a>
-                  </li>
-                  <li>
-                    <a href="#">ladies</a>
-                  </li>
-                  <li>
-                    <a href="#">westrn dress</a>
-                  </li>
-                  <li>
-                    <a href="#">denim </a>
-                  </li>
+                  {
+                    categorydata.map((names,i)=>(
+                    <li key={names.id}>
+                        <a href="#">{names.category}</a>
+                    </li>
+                    ))
+                    }
                 </ul>
               </div>
             </div>
             <div className="col-lg-9 col-12">
               <div className="menu-area">
-                {/* Main Menu */}
+                {/* Main Menu */ /* navbardata */} 
                 <nav className="navbar navbar-expand-lg">
                   <div className="navbar-collapse">
                     <div className="nav-inner">
                       <ul className="nav main-menu menu navbar-nav">
-                        <li className="active">
-                          <a href="#">Home</a>
-                        </li>
+                        {
+                            navbardata.map((names,i)=>(
+                                <div key={names.id}>
+                            {names.type==="active" ? (<li className="active"><a href="#">{names.name}</a></li>):<li><a href="#">{names.name}</a></li>}
+                            </div>
+                            ))
+                        }
                         <li>
-                          <a href="#">Product</a>
-                        </li>
-                        <li>
-                          <a href="#">Service</a>
+                          <a href="#">
+                            Blog
+                            <i className="ti-angle-down" />
+                          </a>
+                          <ul className="dropdown">
+                            <li>
+                              <a href="blog-single-sidebar.html">
+                                Blog Single Sidebar
+                              </a>
+                            </li>
+                          </ul>
                         </li>
                         <li>
                           <a href="#">
@@ -344,25 +318,6 @@ function Header() {
                             </li>
                           </ul>
                         </li>
-                        <li>
-                          <a href="#">Pages</a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Blog
-                            <i className="ti-angle-down" />
-                          </a>
-                          <ul className="dropdown">
-                            <li>
-                              <a href="blog-single-sidebar.html">
-                                Blog Single Sidebar
-                              </a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="contact.html">Contact Us</a>
-                        </li>
                       </ul>
                     </div>
                   </div>
@@ -377,9 +332,12 @@ function Header() {
     {/*/ End Header Inner */}
   </header>
   {/*/ End Header */}
+  <SliderArea></SliderArea>
+  <Products></Products>
 </>
       
     </div>
+    
   )
 }
 

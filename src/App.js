@@ -1,6 +1,7 @@
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 import Header from './components/Header';
-import PreLoader from './components/PreLoader';
+import Products from './components/Products';
+
 
 
 
@@ -11,6 +12,7 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path='/' element={<Header></Header>} />
+      
     </Routes>
     </BrowserRouter>
     </>
